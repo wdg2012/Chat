@@ -18,7 +18,7 @@ import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
 import cn.finalteam.okhttpfinal.HttpRequest;
 import cn.finalteam.okhttpfinal.RequestParams;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity{
 
     @BindView(R.id.tv)
     TextView tv;
@@ -30,16 +30,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        RequestParams params = new RequestParams();
-//        HttpRequest.get("https://www.baidu.com/index.php?tn=02049043_6_pg",params,new BaseHttpRequestCallback<String>(){
-//            @Override
-//            protected void onSuccess(String s) {
-//                super.onSuccess(s);
-//                tv.setText(s);
-//
-//            }
-//        });
-
     }
 
     @OnClick(R.id.tv)
