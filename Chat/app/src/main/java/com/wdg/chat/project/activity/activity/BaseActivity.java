@@ -14,6 +14,7 @@ import com.wdg.chat.project.R;
 
 /**
  * Created by ${吴登赶} on 2017/8/27.
+ * HuangBin
  */
 
 public class BaseActivity extends AppCompatActivity {
