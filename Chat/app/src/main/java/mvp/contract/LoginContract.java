@@ -9,6 +9,7 @@ import android.widget.TextView;
  */
 public interface LoginContract {
     interface Model {
+        void loginInfo();
     }
 
     interface View {

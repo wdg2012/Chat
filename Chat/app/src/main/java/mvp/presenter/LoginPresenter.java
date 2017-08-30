@@ -10,7 +10,7 @@ import mvp.model.LoginModel;
 public class LoginPresenter implements LoginContract.Presenter {
     private LoginContract.View mLoginView;
     private LoginContract.Model mModel;
-    
+
 
     public LoginPresenter(final LoginContract.View loginView) {
         mLoginView = loginView;

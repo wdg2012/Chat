@@ -7,4 +7,9 @@ import mvp.contract.LoginContract;
  * 邮箱18149542718@163
  */
 public class LoginModel implements LoginContract.Model {
+
+    @Override
+    public void loginInfo() {
+
+    }
 }
