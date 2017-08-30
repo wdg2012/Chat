@@ -17,7 +17,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Bugly.init(getApplicationContext(), "88380eb943", false);
+//        Bugly.init(getApplicationContext(), "88380eb943", false);
         OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
         OkHttpFinal.getInstance().init(builder.build());
     }
