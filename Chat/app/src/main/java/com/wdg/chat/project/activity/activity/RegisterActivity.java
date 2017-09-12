@@ -1,20 +1,32 @@
 package com.wdg.chat.project.activity.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.wdg.chat.project.R;
+import com.wdg.chat.project.activity.activity.app.MyApp;
 import com.wdg.chat.project.activity.activity.bean.RespData;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +40,11 @@ import mvp.presenter.RegisterPresenter;
  * Created by HuangBin on 2017/9/11.
  */
 public class RegisterActivity extends BaseActivity implements RegisterContract.View{
+
+    private final String TAG = RegisterActivity.class.getSimpleName();
+
+    private final int TAKE_PICKERS = 10;//拍照
+    private final int IMAGE_PICKER = 20;//选图
 
 
     @BindView(R.id.etNickName)
@@ -52,6 +69,8 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
         mPresenter = new RegisterPresenter(this);
+        //设置图片为单选模式
+        MyApp.getInstance().setSingleImagePicker();
     }
 
     @Override
@@ -64,26 +83,34 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                                     int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
-            Uri uri = data.getData();
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-            cursor.moveToFirst();
-            photoFile = new File(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)));
-/*            //取得图片uri的列名和此列的详细信息
-            for (int i = 0; i < cursor.getColumnCount(); i++) {
-                System.out.println(i + "-" + cursor.getColumnName(i) + "-" + cursor.getString(i));
-            }*/
+        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+            if(data != null) {
+                //拍照 选图
+                if (requestCode == TAKE_PICKERS
+                        || requestCode == IMAGE_PICKER) {
+                    List<ImageItem> images = (List<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                    //获取图片路径
+                    String path = images.get(0).path;
+                    //Log.d(TAG, "path=" + path);
+                    if(path != null){
+                        photoFile = new File(path);
+                        //显示图片
+                        Glide.with(this)
+                                .load(path)
+                                .placeholder(R.color.voice_login)
+                                .error(R.color.voice_login)
+                                .into(ivPhoto);
+                    }
+                }
+            }
         }
     }
 
     @OnClick({R.id.ivPhoto, R.id.btnRegister})
-    public void onViewClicked(View view) {
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivPhoto:
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                //启动系统图片浏览器
-                startActivityForResult(intent, 1);
+                showPhotoDialog();
                 break;
             case R.id.btnRegister:
                 mPresenter.register(etPhoneNumber.getText().toString(),
@@ -96,7 +123,45 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     }
 
     @Override
-    public void registerResp(RespData<String> respData) {
+    public void registerResp(RespData respData) {
+        /*if(respData.getCode() == 101){
 
+        }else{
+
+        }*/
+        Toast.makeText(this, respData.getError(), Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 显示选图方式对话框
+     */
+    private void showPhotoDialog() {
+        //创建数组
+        String[] items = new String[]{ "拍照", "相册" };
+        //创建对话框
+        Dialog dialog = new AlertDialog.Builder(this)
+                .setTitle("请选择图片")
+                .setItems(items, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        //拍照
+                        if(which == 0){
+                            Intent intent = new Intent(RegisterActivity.this, ImageGridActivity.class);
+                            //是否是直接打开相机
+                            intent.putExtra(ImageGridActivity.EXTRAS_TAKE_PICKERS, true);
+                            startActivityForResult(intent, TAKE_PICKERS);
+                        }
+                        //相册
+                        else{
+                            Intent intent = new Intent(RegisterActivity.this, ImageGridActivity.class);
+                            startActivityForResult(intent, IMAGE_PICKER);
+                        }
+                    }
+
+        }).create();
+        //显示对话框
+        dialog.show();
     }
 }

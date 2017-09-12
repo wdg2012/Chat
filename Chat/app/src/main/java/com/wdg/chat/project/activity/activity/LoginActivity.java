@@ -1,8 +1,10 @@
 package com.wdg.chat.project.activity.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,6 +35,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     RelativeLayout mRltVoiceLogin;
     @BindView(R.id.tv_change_auth)
     TextView mTvChangeAuth;
+    @BindView(R.id.btnRegister)
+    Button btnRegister;
     private LoginContract.Presenter mLoginPresenter;
 
     @Override
@@ -58,13 +62,17 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick({R.id.iv_more, R.id.tv_change_auth})
+    @OnClick({R.id.iv_more, R.id.tv_change_auth, R.id.btnRegister})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_more:
                 break;
             case R.id.tv_change_auth:
                 mLoginPresenter.test("1000");
+                break;
+            case R.id.btnRegister:
+                Intent intent = new Intent(this, RegisterActivity.class);
+                startActivity(intent);
                 break;
         }
     }

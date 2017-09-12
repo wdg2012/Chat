@@ -24,7 +24,7 @@ public interface RegisterContract {
     }
 
     interface View {
-        void registerResp(RespData<String> respData);
+        void registerResp(RespData respData);
     }
 
     interface Presenter {

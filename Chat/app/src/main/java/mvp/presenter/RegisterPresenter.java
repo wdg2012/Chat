@@ -44,7 +44,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
                 super.onSuccess(s);
                 if(mRegisterView != null){
                     Gson gson = new Gson();
-                    RespData<String> respData = gson.fromJson(s, new TypeToken<RespData<String>>(){}.getType());
+                    RespData respData = gson.fromJson(s, new TypeToken<RespData>(){}.getType());
                     mRegisterView.registerResp(respData);
                 }
             }

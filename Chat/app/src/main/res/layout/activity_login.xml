@@ -63,4 +63,16 @@
         android:textColor="#5C6C92"
         android:textSize="16sp" />
 
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="14sp"
+        android:textColor="@color/color_white"
+        android:text="注册"
+        android:background="@drawable/sp_voice_login"/>
+
 </LinearLayout>
