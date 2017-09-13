@@ -1,5 +1,9 @@
 package mvp.model;
 
+import com.wdg.chat.project.activity.activity.bean.RespData;
+import com.wdg.chat.project.activity.activity.bean.VerCode;
+import com.wdg.chat.project.activity.activity.util.HttpRequestCallback;
+
 import java.io.File;
 
 import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
@@ -17,6 +21,20 @@ import mvp.contract.RegisterContract;
 public class RegisterModel implements RegisterContract.Model {
 
     /**
+     * 获取验证码
+     * @param phone
+     * @param callback
+     */
+    @Override
+    public void obtainVerCode(String phone, HttpRequestCallback<RespData<VerCode>> callback) {
+        //创建参数
+        RequestParams params = new RequestParams();
+        params.addFormDataPart("phone", phone);
+        //发送请求
+        HttpRequest.post("http://47.93.21.48:8080/ssm_war/user/getvercode", params, callback);
+    }
+
+    /**
      * 注册
      * @param phone
      * @param password
@@ -32,7 +50,7 @@ public class RegisterModel implements RegisterContract.Model {
                          String country,
                          File headPhoto,
                          String ver_code,
-                         String user_nick, BaseHttpRequestCallback<String> callback) {
+                         String user_nick, HttpRequestCallback<RespData> callback) {
         //创建参数
         RequestParams params = new RequestParams();
         params.addFormDataPart("phone", phone);

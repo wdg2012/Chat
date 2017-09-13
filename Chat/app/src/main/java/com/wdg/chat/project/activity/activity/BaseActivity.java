@@ -1,5 +1,6 @@
 package com.wdg.chat.project.activity.activity;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,10 +18,19 @@ import com.wdg.chat.project.R;
  */
 
 public class BaseActivity extends AppCompatActivity {
+
+    protected ProgressDialog prgDialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+        //创建进度条对话框
+        prgDialog = new ProgressDialog(this);
+        prgDialog.setMessage("正在加载数据......");
+        prgDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        prgDialog.setCancelable(false);
+        prgDialog.setCanceledOnTouchOutside(false);
     }
 }

@@ -23,6 +23,7 @@ import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.wdg.chat.project.R;
 import com.wdg.chat.project.activity.activity.app.MyApp;
 import com.wdg.chat.project.activity.activity.bean.RespData;
+import com.wdg.chat.project.activity.activity.bean.VerCode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-        mPresenter = new RegisterPresenter(this);
+        mPresenter = new RegisterPresenter(this, prgDialog);
         //设置图片为单选模式
         MyApp.getInstance().setSingleImagePicker();
     }
@@ -113,12 +114,21 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                 showPhotoDialog();
                 break;
             case R.id.btnRegister:
-                mPresenter.register(etPhoneNumber.getText().toString(),
-                        etPassword.getText().toString(),
-                        etCountry.getText().toString(),
-                        photoFile,
-                        "1.0", etNickName.getText().toString());
+                showGetVerCodeDialog();
                 break;
+        }
+    }
+
+    @Override
+    public void verCodeResp(RespData<VerCode> respData) {
+        if(respData.getCode() == 101){
+            mPresenter.register(etPhoneNumber.getText().toString(),
+                    etPassword.getText().toString(),
+                    etCountry.getText().toString(),
+                    photoFile,
+                    respData.getObj().ver_code, etNickName.getText().toString());
+        }else{
+            Toast.makeText(this, respData.getError(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -130,6 +140,34 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
         }*/
         Toast.makeText(this, respData.getError(), Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 显示获取验证码对话框
+     */
+    private void showGetVerCodeDialog(){
+        //创建对话框
+        Dialog dialog = new AlertDialog.Builder(this)
+                .setTitle("确认手机号码")
+                .setMessage("我们将发送验证码短信到这个号码:\n"
+                        + etCountry.getText().toString() + etPhoneNumber.getText().toString())
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        mPresenter.obtainVerCode(etPhoneNumber.getText().toString());
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        //显示对话框
+        dialog.show();
     }
 
     /**
