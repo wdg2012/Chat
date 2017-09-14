@@ -4,12 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,11 +18,10 @@ import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.wdg.chat.project.R;
 import com.wdg.chat.project.activity.activity.app.MyApp;
-import com.wdg.chat.project.activity.activity.bean.RespData;
-import com.wdg.chat.project.activity.activity.bean.VerCode;
+import com.wdg.chat.project.activity.activity.bean.RegisterBean;
+import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -120,26 +115,27 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     }
 
     @Override
-    public void verCodeResp(RespData<VerCode> respData) {
-        if(respData.getCode() == 101){
+    public void verCodeResp(VerCodeBean verCodeBean) {
+        if("101".equals(verCodeBean.getCode())){
             mPresenter.register(etPhoneNumber.getText().toString(),
                     etPassword.getText().toString(),
                     etCountry.getText().toString(),
                     photoFile,
-                    respData.getObj().ver_code, etNickName.getText().toString());
+                    verCodeBean.getObj().getVer_code(),
+                    etNickName.getText().toString());
         }else{
-            Toast.makeText(this, respData.getError(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, verCodeBean.getError(), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void registerResp(RespData respData) {
+    public void registerResp(RegisterBean registerBean) {
         /*if(respData.getCode() == 101){
 
         }else{
 
         }*/
-        Toast.makeText(this, respData.getError(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, registerBean.getError(), Toast.LENGTH_SHORT).show();
     }
 
     /**

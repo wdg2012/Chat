@@ -1,10 +1,7 @@
 package mvp.contract;
 
-import android.widget.ImageView;
-
-import com.wdg.chat.project.activity.activity.bean.RespData;
-import com.wdg.chat.project.activity.activity.bean.VerCode;
-import com.wdg.chat.project.activity.activity.util.HttpRequestCallback;
+import com.wdg.chat.project.activity.activity.bean.RegisterBean;
+import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
 
 import java.io.File;
 
@@ -17,18 +14,18 @@ import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
 public interface RegisterContract {
 
     interface Model {
-        void obtainVerCode(String phone, HttpRequestCallback<RespData<VerCode>> callback);
+        void obtainVerCode(String phone, BaseHttpRequestCallback<VerCodeBean> callback);
         void register(String phone,
                       String password,
                       String country,
                       File headPhoto,
                       String ver_code,
-                      String user_nick, HttpRequestCallback<RespData> callback);
+                      String user_nick, BaseHttpRequestCallback<RegisterBean> callback);
     }
 
     interface View {
-        void verCodeResp(RespData<VerCode> respData);
-        void registerResp(RespData respData);
+        void verCodeResp(VerCodeBean verCodeBean);
+        void registerResp(RegisterBean registerBean);
     }
 
     interface Presenter {

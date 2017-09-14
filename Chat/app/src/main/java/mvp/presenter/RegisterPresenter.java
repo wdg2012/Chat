@@ -2,16 +2,13 @@ package mvp.presenter;
 
 import android.app.Dialog;
 
-import com.wdg.chat.project.activity.activity.bean.RespData;
-import com.wdg.chat.project.activity.activity.bean.VerCode;
-import com.wdg.chat.project.activity.activity.util.HttpRequestCallback;
+import com.wdg.chat.project.activity.activity.bean.RegisterBean;
+import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
 
 import java.io.File;
 
 import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
-import mvp.contract.LoginContract;
 import mvp.contract.RegisterContract;
-import mvp.model.LoginModel;
 import mvp.model.RegisterModel;
 
 
@@ -50,14 +47,14 @@ public class RegisterPresenter implements RegisterContract.Presenter {
     public void obtainVerCode(String phone) {
         showDialog();
         //获取验证码
-        mRegisterModel.obtainVerCode(phone, new HttpRequestCallback<RespData<VerCode>>(){
+        mRegisterModel.obtainVerCode(phone, new BaseHttpRequestCallback<VerCodeBean>(){
 
             @Override
-            protected void onRespSuccess(RespData<VerCode> respData) {
-                super.onRespSuccess(respData);
-                dismissDialog();
+            protected void onSuccess(VerCodeBean verCodeBean) {
+                super.onSuccess(verCodeBean);
+                //dismissDialog();
                 if(mRegisterView != null){
-                    mRegisterView.verCodeResp(respData);
+                    mRegisterView.verCodeResp(verCodeBean);
                 }
             }
 
@@ -79,14 +76,14 @@ public class RegisterPresenter implements RegisterContract.Presenter {
         //注册
         mRegisterModel.register(phone, password,
                                 country, headPhoto,
-                                ver_code, user_nick, new HttpRequestCallback<RespData>(){
+                                ver_code, user_nick, new BaseHttpRequestCallback<RegisterBean>(){
 
             @Override
-            protected void onRespSuccess(RespData respData) {
-                super.onRespSuccess(respData);
+            protected void onSuccess(RegisterBean registerBean) {
+                super.onSuccess(registerBean);
                 dismissDialog();
                 if(mRegisterView != null){
-                    mRegisterView.registerResp(respData);
+                    mRegisterView.registerResp(registerBean);
                 }
             }
 

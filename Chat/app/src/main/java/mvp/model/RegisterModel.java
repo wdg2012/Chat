@@ -1,15 +1,13 @@
 package mvp.model;
 
-import com.wdg.chat.project.activity.activity.bean.RespData;
-import com.wdg.chat.project.activity.activity.bean.VerCode;
-import com.wdg.chat.project.activity.activity.util.HttpRequestCallback;
+import com.wdg.chat.project.activity.activity.bean.RegisterBean;
+import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
 
 import java.io.File;
 
 import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
 import cn.finalteam.okhttpfinal.HttpRequest;
 import cn.finalteam.okhttpfinal.RequestParams;
-import mvp.contract.LoginContract;
 import mvp.contract.RegisterContract;
 
 
@@ -26,7 +24,7 @@ public class RegisterModel implements RegisterContract.Model {
      * @param callback
      */
     @Override
-    public void obtainVerCode(String phone, HttpRequestCallback<RespData<VerCode>> callback) {
+    public void obtainVerCode(String phone, BaseHttpRequestCallback<VerCodeBean> callback) {
         //创建参数
         RequestParams params = new RequestParams();
         params.addFormDataPart("phone", phone);
@@ -50,7 +48,7 @@ public class RegisterModel implements RegisterContract.Model {
                          String country,
                          File headPhoto,
                          String ver_code,
-                         String user_nick, HttpRequestCallback<RespData> callback) {
+                         String user_nick, BaseHttpRequestCallback<RegisterBean> callback) {
         //创建参数
         RequestParams params = new RequestParams();
         params.addFormDataPart("phone", phone);
