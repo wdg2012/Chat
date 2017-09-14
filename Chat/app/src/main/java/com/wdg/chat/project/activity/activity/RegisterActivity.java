@@ -64,7 +64,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-        mPresenter = new RegisterPresenter(this, prgDialog);
+        mPresenter = new RegisterPresenter(this);
         //设置图片为单选模式
         MyApp.getInstance().setSingleImagePicker();
     }
@@ -111,6 +111,20 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
             case R.id.btnRegister:
                 showGetVerCodeDialog();
                 break;
+        }
+    }
+
+    @Override
+    public void showDialog(){
+        if(prgDialog != null && !prgDialog.isShowing()){
+            prgDialog.show();
+        }
+    }
+
+    @Override
+    public void dismissDialog(){
+        if(prgDialog != null && prgDialog.isShowing()){
+            prgDialog.dismiss();
         }
     }
 

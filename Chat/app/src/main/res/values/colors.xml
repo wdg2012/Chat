@@ -6,4 +6,5 @@
     <color name="main_color">#393A3F</color>
     <color name="voice_login">#1AAC19</color>
     <color name="color_white">#ffffff</color>
+    <color name="color_black">#000000</color>
 </resources>

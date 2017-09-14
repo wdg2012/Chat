@@ -1,7 +1,5 @@
 package mvp.presenter;
 
-import android.app.Dialog;
-
 import com.wdg.chat.project.activity.activity.bean.RegisterBean;
 import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
 
@@ -20,40 +18,25 @@ public class RegisterPresenter implements RegisterContract.Presenter {
 
     private RegisterContract.View mRegisterView;
     private RegisterContract.Model mRegisterModel;
-    private Dialog mDialog;
 
-
-    public RegisterPresenter(final RegisterContract.View registerView, Dialog dialog){
+    public RegisterPresenter(RegisterContract.View registerView){
         mRegisterView = registerView;
         mRegisterModel = new RegisterModel();
-        mDialog = dialog;
-    }
-
-    @Override
-    public void showDialog(){
-        if(mDialog != null && !mDialog.isShowing()){
-            mDialog.show();
-        }
-    }
-
-    @Override
-    public void dismissDialog(){
-        if(mDialog != null && mDialog.isShowing()){
-            mDialog.dismiss();
-        }
     }
 
     @Override
     public void obtainVerCode(String phone) {
-        showDialog();
+        if(mRegisterView != null){
+            mRegisterView.showDialog();
+        }
         //获取验证码
         mRegisterModel.obtainVerCode(phone, new BaseHttpRequestCallback<VerCodeBean>(){
 
             @Override
             protected void onSuccess(VerCodeBean verCodeBean) {
                 super.onSuccess(verCodeBean);
-                //dismissDialog();
                 if(mRegisterView != null){
+                    //mRegisterView.dismissDialog();
                     mRegisterView.verCodeResp(verCodeBean);
                 }
             }
@@ -61,7 +44,9 @@ public class RegisterPresenter implements RegisterContract.Presenter {
             @Override
             public void onFailure(int errorCode, String msg) {
                 super.onFailure(errorCode, msg);
-                dismissDialog();
+                if(mRegisterView != null){
+                    mRegisterView.dismissDialog();
+                }
             }
         });
     }
@@ -72,7 +57,9 @@ public class RegisterPresenter implements RegisterContract.Presenter {
                          String country,
                          File headPhoto,
                          String ver_code, String user_nick) {
-        showDialog();
+        if(mRegisterView != null){
+            mRegisterView.showDialog();
+        }
         //注册
         mRegisterModel.register(phone, password,
                                 country, headPhoto,
@@ -81,8 +68,8 @@ public class RegisterPresenter implements RegisterContract.Presenter {
             @Override
             protected void onSuccess(RegisterBean registerBean) {
                 super.onSuccess(registerBean);
-                dismissDialog();
                 if(mRegisterView != null){
+                    mRegisterView.dismissDialog();
                     mRegisterView.registerResp(registerBean);
                 }
             }
@@ -90,7 +77,9 @@ public class RegisterPresenter implements RegisterContract.Presenter {
             @Override
             public void onFailure(int errorCode, String msg) {
                 super.onFailure(errorCode, msg);
-                dismissDialog();
+                if(mRegisterView != null){
+                    mRegisterView.dismissDialog();
+                }
             }
 
         });

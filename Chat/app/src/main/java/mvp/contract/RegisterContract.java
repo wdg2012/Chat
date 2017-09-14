@@ -24,13 +24,13 @@ public interface RegisterContract {
     }
 
     interface View {
+        void showDialog();
+        void dismissDialog();
         void verCodeResp(VerCodeBean verCodeBean);
         void registerResp(RegisterBean registerBean);
     }
 
     interface Presenter {
-        void showDialog();
-        void dismissDialog();
         void obtainVerCode(String phone);
         void register(String phone,
                       String password,
