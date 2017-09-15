@@ -3,8 +3,6 @@ package mvp.presenter;
 import com.wdg.chat.project.activity.activity.bean.RegisterBean;
 import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
 
-import java.io.File;
-
 import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
 import mvp.contract.RegisterContract;
 import mvp.model.RegisterModel;
@@ -36,7 +34,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
             protected void onSuccess(VerCodeBean verCodeBean) {
                 super.onSuccess(verCodeBean);
                 if(mRegisterView != null){
-                    //mRegisterView.dismissDialog();
+                    mRegisterView.dismissDialog();
                     mRegisterView.verCodeResp(verCodeBean);
                 }
             }
@@ -48,40 +46,6 @@ public class RegisterPresenter implements RegisterContract.Presenter {
                     mRegisterView.dismissDialog();
                 }
             }
-        });
-    }
-
-    @Override
-    public void register(String phone,
-                         String password,
-                         String country,
-                         File headPhoto,
-                         String ver_code, String user_nick) {
-        if(mRegisterView != null){
-            mRegisterView.showDialog();
-        }
-        //注册
-        mRegisterModel.register(phone, password,
-                                country, headPhoto,
-                                ver_code, user_nick, new BaseHttpRequestCallback<RegisterBean>(){
-
-            @Override
-            protected void onSuccess(RegisterBean registerBean) {
-                super.onSuccess(registerBean);
-                if(mRegisterView != null){
-                    mRegisterView.dismissDialog();
-                    mRegisterView.registerResp(registerBean);
-                }
-            }
-
-            @Override
-            public void onFailure(int errorCode, String msg) {
-                super.onFailure(errorCode, msg);
-                if(mRegisterView != null){
-                    mRegisterView.dismissDialog();
-                }
-            }
-
         });
     }
 

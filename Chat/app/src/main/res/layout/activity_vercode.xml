@@ -93,10 +93,11 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"
-        android:padding="20dp"
+        android:padding="15dp"
+        android:enabled="false"
         android:textSize="18sp"
         android:textColor="@color/color_white"
         android:text="下一步"
-        android:background="@color/voice_login"/>
+        android:background="@color/color_green2"/>
 
 </LinearLayout>

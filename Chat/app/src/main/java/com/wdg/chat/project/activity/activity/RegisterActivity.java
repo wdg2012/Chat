@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,10 +20,8 @@ import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.wdg.chat.project.R;
 import com.wdg.chat.project.activity.activity.app.MyApp;
-import com.wdg.chat.project.activity.activity.bean.RegisterBean;
 import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
 
-import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,6 +41,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     private final int TAKE_PICKERS = 10;//拍照
     private final int IMAGE_PICKER = 20;//选图
+    private final int START_VERCODE = 30;//跳转验证码页面
 
 
     @BindView(R.id.etNickName)
@@ -56,7 +57,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     @BindView(R.id.btnRegister)
     Button btnRegister;
 
-    private File photoFile;
+    private String photoPath;
     private RegisterPresenter mPresenter;
 
     @Override
@@ -78,26 +79,30 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     protected void onActivityResult(int requestCode,
                                     int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-            if(data != null) {
-                //拍照 选图
-                if (requestCode == TAKE_PICKERS
-                        || requestCode == IMAGE_PICKER) {
-                    List<ImageItem> images = (List<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                    //获取图片路径
-                    String path = images.get(0).path;
-                    //Log.d(TAG, "path=" + path);
-                    if(path != null){
-                        photoFile = new File(path);
-                        //显示图片
-                        Glide.with(this)
-                                .load(path)
-                                .placeholder(R.color.voice_login)
-                                .error(R.color.voice_login)
-                                .into(ivPhoto);
-                    }
+        //拍照 选图
+        if (requestCode == TAKE_PICKERS
+                || requestCode == IMAGE_PICKER) {
+            //判断结果码
+            if (resultCode == ImagePicker.RESULT_CODE_ITEMS && data != null) {
+                List<ImageItem> images = (List<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                //获取图片路径
+                photoPath = images.get(0).path;
+                //Log.d(TAG, "path=" + path);
+                if (photoPath != null) {
+                    //显示图片
+                    Glide.with(this)
+                            .load(photoPath)
+                            .placeholder(R.color.voice_login)
+                            .error(R.color.voice_login)
+                            .into(ivPhoto);
                 }
+            }
+        }
+        //验证码页面返回
+        else if(requestCode == START_VERCODE){
+            if(resultCode == RESULT_OK){
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
             }
         }
     }
@@ -109,7 +114,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                 showPhotoDialog();
                 break;
             case R.id.btnRegister:
-                showGetVerCodeDialog();
+                if(validate()) {
+                    showGetVerCodeDialog();
+                }
                 break;
         }
     }
@@ -131,25 +138,19 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     @Override
     public void verCodeResp(VerCodeBean verCodeBean) {
         if("101".equals(verCodeBean.getCode())){
-            mPresenter.register(etPhoneNumber.getText().toString(),
-                    etPassword.getText().toString(),
-                    etCountry.getText().toString(),
-                    photoFile,
-                    verCodeBean.getObj().getVer_code(),
-                    etNickName.getText().toString());
+            Log.d("VerCode", verCodeBean.getObj().getVer_code());
+            Intent intent = new Intent(this, VerCodeActivity.class);
+            //保存参数
+            intent.putExtra("phone", etPhoneNumber.getText().toString())
+                .putExtra("password", etPassword.getText().toString())
+                .putExtra("country", etCountry.getText().toString())
+                .putExtra("headPhoto", photoPath)
+                .putExtra("user_nick", etNickName.getText().toString());
+            //启动验证码页面
+            startActivityForResult(intent, START_VERCODE);
         }else{
             Toast.makeText(this, verCodeBean.getError(), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    public void registerResp(RegisterBean registerBean) {
-        /*if(respData.getCode() == 101){
-
-        }else{
-
-        }*/
-        Toast.makeText(this, registerBean.getError(), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -211,5 +212,29 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         }).create();
         //显示对话框
         dialog.show();
+    }
+
+    private boolean validate(){
+        boolean result = true;
+        String error = "";
+
+        if(TextUtils.isEmpty(etNickName.getText().toString())){
+            error = "昵称不能为空!";
+            result = false;
+        }
+        else if(TextUtils.isEmpty(etPhoneNumber.getText().toString())){
+            error = "手机号不能为空!";
+            result = false;
+        }
+        else if(TextUtils.isEmpty(etPassword.getText().toString())){
+            error = "密码不能为空!";
+            result = false;
+        }
+
+        if(!result){
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        }
+
+        return result;
     }
 }

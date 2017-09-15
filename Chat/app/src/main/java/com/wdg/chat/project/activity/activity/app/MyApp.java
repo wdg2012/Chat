@@ -59,9 +59,9 @@ public class MyApp extends Application {
         //裁剪框的高度。单位像素（圆形自动取宽高最小值）
         //imagePicker.setFocusHeight(800);
         //保存文件的宽度。单位像素
-        imagePicker.setOutPutX(1000);
+        imagePicker.setOutPutX(200);
         //保存文件的高度。单位像素
-        imagePicker.setOutPutY(1000);
+        imagePicker.setOutPutY(200);
     }
 
     /**
