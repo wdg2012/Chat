@@ -13,17 +13,15 @@ import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
  */
 public interface RegisterContract {
 
-    interface Model {
+    interface Model extends BaseContract.Model{
         void obtainVerCode(String phone, BaseHttpRequestCallback<VerCodeBean> callback);
     }
 
-    interface View {
-        void showDialog();
-        void dismissDialog();
+    interface View extends BaseContract.View{
         void verCodeResp(VerCodeBean verCodeBean);
     }
 
-    interface Presenter {
+    interface Presenter extends BaseContract.Presenter{
         void obtainVerCode(String phone);
     }
 

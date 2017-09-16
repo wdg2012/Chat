@@ -1,6 +1,5 @@
 package mvp.presenter;
 
-import com.wdg.chat.project.activity.activity.bean.RegisterBean;
 import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
 
 import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;

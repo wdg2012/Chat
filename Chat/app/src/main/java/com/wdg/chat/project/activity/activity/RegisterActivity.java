@@ -122,20 +122,6 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     }
 
     @Override
-    public void showDialog(){
-        if(prgDialog != null && !prgDialog.isShowing()){
-            prgDialog.show();
-        }
-    }
-
-    @Override
-    public void dismissDialog(){
-        if(prgDialog != null && prgDialog.isShowing()){
-            prgDialog.dismiss();
-        }
-    }
-
-    @Override
     public void verCodeResp(VerCodeBean verCodeBean) {
         if("101".equals(verCodeBean.getCode())){
             Log.d("VerCode", verCodeBean.getObj().getVer_code());

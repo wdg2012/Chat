@@ -219,6 +219,6 @@
         android:textSize="14sp"
         android:textColor="@color/color_white"
         android:text="注册"
-        android:background="@color/voice_login"/>
+        android:background="@drawable/comm_btn_enable"/>
 
 </LinearLayout>

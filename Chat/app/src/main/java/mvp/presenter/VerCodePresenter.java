@@ -1,7 +1,6 @@
 package mvp.presenter;
 
 import com.wdg.chat.project.activity.activity.bean.RegisterBean;
-import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
 
 import java.io.File;
 
@@ -22,33 +21,6 @@ public class VerCodePresenter implements VerCodeContract.Presenter {
     public VerCodePresenter(VerCodeContract.View verCodeView){
         mVerCodeView = verCodeView;
         mVerCodeModel = new VerCodeModel();
-    }
-
-    @Override
-    public void obtainVerCode(String phone) {
-        if(mVerCodeView != null){
-            mVerCodeView.showDialog();
-        }
-        //获取验证码
-        mVerCodeModel.obtainVerCode(phone, new BaseHttpRequestCallback<VerCodeBean>(){
-
-            @Override
-            protected void onSuccess(VerCodeBean verCodeBean) {
-                super.onSuccess(verCodeBean);
-                if(mVerCodeView != null){
-                    mVerCodeView.dismissDialog();
-                    mVerCodeView.verCodeResp(verCodeBean);
-                }
-            }
-
-            @Override
-            public void onFailure(int errorCode, String msg) {
-                super.onFailure(errorCode, msg);
-                if(mVerCodeView != null){
-                    mVerCodeView.dismissDialog();
-                }
-            }
-        });
     }
 
     @Override

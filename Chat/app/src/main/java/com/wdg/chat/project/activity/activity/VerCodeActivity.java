@@ -23,20 +23,19 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
+import mvp.contract.RegisterContract;
 import mvp.contract.VerCodeContract;
+import mvp.presenter.RegisterPresenter;
 import mvp.presenter.VerCodePresenter;
 
-import static com.wdg.chat.project.R.id.etCountry;
-import static com.wdg.chat.project.R.id.etNickName;
-import static com.wdg.chat.project.R.id.etPassword;
 
 
 /**
  * 验证码页面
  * Created by HuangBin on 2017/9/15.
  */
-public class VerCodeActivity extends BaseActivity implements VerCodeContract.View {
+public class VerCodeActivity extends BaseActivity
+        implements VerCodeContract.View, RegisterContract.View {
 
     private final long TIME = 60 * 1000;
     private final long INTERVAL = 1000;
@@ -50,7 +49,8 @@ public class VerCodeActivity extends BaseActivity implements VerCodeContract.Vie
     @BindView(R.id.btnRegister)
     Button btnRegister;
 
-    private VerCodePresenter mPresenter;
+    private VerCodePresenter mVerPresenter;
+    private RegisterPresenter mRegPresenter;
     private String phone, password, country, user_nick;
     private File photoFile;
 
@@ -80,10 +80,10 @@ public class VerCodeActivity extends BaseActivity implements VerCodeContract.Vie
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if(s.length() > 0){
                 btnRegister.setEnabled(true);
-                btnRegister.setBackgroundColor(getResources().getColor(R.color.color_green1));
+                btnRegister.setBackground(getResources().getDrawable(R.drawable.comm_btn_enable));
             }else{
                 btnRegister.setEnabled(false);
-                btnRegister.setBackgroundColor(getResources().getColor(R.color.color_green2));
+                btnRegister.setBackground(getResources().getDrawable(R.drawable.comm_btn_disenable));
             }
         }
 
@@ -110,7 +110,8 @@ public class VerCodeActivity extends BaseActivity implements VerCodeContract.Vie
             photoFile = new File(headPhoto);
         }
         initView();
-        mPresenter = new VerCodePresenter(this);
+        mVerPresenter = new VerCodePresenter(this);
+        mRegPresenter = new RegisterPresenter(this);
         countDownTimer.cancel();
         countDownTimer.start();
     }
@@ -120,7 +121,7 @@ public class VerCodeActivity extends BaseActivity implements VerCodeContract.Vie
         etVerCode.getText().clear();
         etVerCode.addTextChangedListener(textWatcher);
         btnRegister.setEnabled(false);
-        btnRegister.setBackgroundColor(getResources().getColor(R.color.color_green2));
+        btnRegister.setBackground(getResources().getDrawable(R.drawable.comm_btn_disenable));
     }
 
     @Override
@@ -133,27 +134,13 @@ public class VerCodeActivity extends BaseActivity implements VerCodeContract.Vie
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnRegister:
-                mPresenter.register(phone, password,
+                mVerPresenter.register(phone, password,
                         country, photoFile,
                         etVerCode.getText().toString(), user_nick);
                 break;
             case R.id.tvVerCodeInfo:
-                mPresenter.obtainVerCode(phone);
+                mRegPresenter.obtainVerCode(phone);
                 break;
-        }
-    }
-
-    @Override
-    public void showDialog() {
-        if(prgDialog != null && !prgDialog.isShowing()){
-            prgDialog.show();
-        }
-    }
-
-    @Override
-    public void dismissDialog() {
-        if(prgDialog != null && prgDialog.isShowing()){
-            prgDialog.dismiss();
         }
     }
 

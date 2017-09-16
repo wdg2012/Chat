@@ -1,7 +1,6 @@
 package mvp.model;
 
 import com.wdg.chat.project.activity.activity.bean.RegisterBean;
-import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
 
 import java.io.File;
 
@@ -17,20 +16,6 @@ import mvp.contract.VerCodeContract;
  * 邮箱18149542718@163
  */
 public class VerCodeModel implements VerCodeContract.Model {
-
-    /**
-     * 获取验证码
-     * @param phone
-     * @param callback
-     */
-    @Override
-    public void obtainVerCode(String phone, BaseHttpRequestCallback<VerCodeBean> callback) {
-        //创建参数
-        RequestParams params = new RequestParams();
-        params.addFormDataPart("phone", phone);
-        //发送请求
-        HttpRequest.post("http://47.93.21.48:8080/ssm_war/user/getvercode", params, callback);
-    }
 
     /**
      * 注册

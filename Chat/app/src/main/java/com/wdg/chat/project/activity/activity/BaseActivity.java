@@ -13,11 +13,13 @@ import android.view.WindowManager;
 
 import com.wdg.chat.project.R;
 
+import mvp.contract.BaseContract;
+
 /**
  * Created by ${吴登赶} on 2017/8/27.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements BaseContract.View{
 
     protected ProgressDialog prgDialog;
 
@@ -33,4 +35,24 @@ public class BaseActivity extends AppCompatActivity {
         prgDialog.setCancelable(false);
         prgDialog.setCanceledOnTouchOutside(false);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void showDialog(){
+        if(prgDialog != null && !prgDialog.isShowing()){
+            prgDialog.show();
+        }
+    }
+
+    @Override
+    public void dismissDialog(){
+        if(prgDialog != null && prgDialog.isShowing()){
+            prgDialog.dismiss();
+        }
+    }
+
 }

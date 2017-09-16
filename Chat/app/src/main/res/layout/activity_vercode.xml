@@ -98,6 +98,6 @@
         android:textSize="18sp"
         android:textColor="@color/color_white"
         android:text="下一步"
-        android:background="@color/color_green2"/>
+        android:background="@drawable/comm_btn_disenable"/>
 
 </LinearLayout>
