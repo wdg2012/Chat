@@ -1,7 +1,7 @@
 package mvp.contract;
 
-import android.widget.ImageView;
-import android.widget.TextView;
+import com.wdg.chat.project.activity.activity.bean.LoginBean;
+import com.wdg.chat.project.activity.activity.bean.RegisterBean;
 
 import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
 
@@ -11,19 +11,17 @@ import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
  */
 public interface LoginContract {
 
-    interface Model {
-        void loginInfo();
-        void test(String id, BaseHttpRequestCallback<String> callback);
+    interface Model extends BaseContract.Model{
+        void login(String phone, String password,
+                   BaseHttpRequestCallback<LoginBean> callback);
     }
 
-    interface View {
-        ImageView getHeadImageView();
-        void setAccount(String text);
-        void onTestResp(String result);
+    interface View extends BaseContract.View{
+        void loginResp(LoginBean loginBean);
     }
 
-    interface Presenter {
-        void test(String id);
+    interface Presenter extends BaseContract.Presenter{
+        void login(String phone, String password);
     }
 
 }

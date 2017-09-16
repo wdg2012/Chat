@@ -32,6 +32,8 @@
             android:theme="@android:style/Theme.Translucent" />
         <activity android:name=".activity.activity.RegisterActivity"/>
         <activity android:name=".activity.activity.VerCodeActivity"/>
+        <activity android:name=".activity.activity.PhoneLoginFActivity"/>
+        <activity android:name=".activity.activity.PhoneLoginSActivity"/>
 
     </application>
 

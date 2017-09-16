@@ -1,5 +1,7 @@
 package mvp.presenter;
 
+import com.wdg.chat.project.activity.activity.bean.LoginBean;
+
 import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
 import mvp.contract.LoginContract;
 import mvp.model.LoginModel;
@@ -9,30 +11,38 @@ import mvp.model.LoginModel;
  * 邮箱18149542718@163
  */
 public class LoginPresenter implements LoginContract.Presenter {
+
     private LoginContract.View mLoginView;
-    private LoginContract.Model mModel;
+    private LoginContract.Model mLoginModel;
 
-
-    public LoginPresenter(final LoginContract.View loginView) {
+    public LoginPresenter(LoginContract.View loginView) {
         mLoginView = loginView;
-        mModel = new LoginModel();
+        mLoginModel = new LoginModel();
     }
 
     @Override
-    public void test(String id) {
-        mModel.test(id, new BaseHttpRequestCallback<String>(){
+    public void login(String phone, String password) {
+        if(mLoginView != null){
+            mLoginView.showDialog();
+        }
+        mLoginModel.login(phone, password,
+                new BaseHttpRequestCallback<LoginBean>(){
 
             @Override
-            protected void onSuccess(String s) {
-                super.onSuccess(s);
+            protected void onSuccess(LoginBean loginBean) {
+                super.onSuccess(loginBean);
                 if(mLoginView != null){
-                    mLoginView.onTestResp(s);
+                    mLoginView.dismissDialog();
+                    mLoginView.loginResp(loginBean);
                 }
             }
 
             @Override
             public void onFailure(int errorCode, String msg) {
                 super.onFailure(errorCode, msg);
+                if(mLoginView != null){
+                    mLoginView.dismissDialog();
+                }
             }
 
         });

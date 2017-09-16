@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvSwtAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:padding="15dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:text="切换账号"/>
+
+    <TextView
+        android:id="@+id/tvFindPwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:padding="15dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:text="找回密码"/>
+
+    <TextView
+        android:id="@+id/tvSeyCenter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:padding="15dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:text="微信安全中心"/>
+
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:padding="15dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:text="注册"/>
+
+</LinearLayout>
