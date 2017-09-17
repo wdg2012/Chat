@@ -1,6 +1,7 @@
 package com.wdg.chat.project.activity.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.mob.MobSDK;
 import com.wdg.chat.project.R;
 import com.wdg.chat.project.activity.activity.bean.UserBean;
 import com.wdg.chat.project.activity.activity.util.SharedPrfUtil;
@@ -25,6 +27,8 @@ import com.wdg.chat.project.activity.activity.util.SharedPrfUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 import mvp.contract.LoginContract;
 import mvp.presenter.LoginPresenter;
 
@@ -76,7 +80,19 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         }
 
     };
-
+    EventHandler eventHandler = new EventHandler() {
+        public void afterEvent(int event, int result, Object data) {
+            if (data instanceof Throwable) {
+                Throwable throwable = (Throwable)data;
+                String msg = throwable.getMessage();
+                Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+            } else {
+                if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+                    // 处理你自己的逻辑
+                }
+            }
+        }
+    };
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,11 +102,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         initView();
         initPopupWindow();
         mPresenter = new LoginPresenter(this);
+        SMSSDK.registerEventHandler(eventHandler);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        SMSSDK.unregisterEventHandler(eventHandler);
     }
 
     private void initView(){
@@ -149,10 +167,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         content.findViewById(R.id.tvFindPwd).setOnClickListener(buttonClick);
         content.findViewById(R.id.tvSeyCenter).setOnClickListener(buttonClick);
         content.findViewById(R.id.tvRegister).setOnClickListener(buttonClick);
-
+        content.findViewById(R.id.pop_root).setOnClickListener(buttonClick);
         popupWindow = new PopupWindow(content,
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
     }
 
     private class PopButtonClick implements View.OnClickListener {
@@ -166,16 +188,22 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                     intent = new Intent(LoginActivity.this, PhoneLoginFActivity.class);
                     break;
                 case R.id.tvFindPwd:
+
+                    SMSSDK.getVerificationCode("86","15705817983");
                     break;
                 case R.id.tvSeyCenter:
                     break;
                 case R.id.tvRegister:
                     intent = new Intent(LoginActivity.this, RegisterActivity.class);
                     break;
+                case R.id.pop_root:
+                    break;
             }
             if (intent != null) {
                 startActivity(intent);
-                finish();
+            }
+            if (popupWindow!=null && popupWindow.isShowing()){
+                popupWindow.dismiss();
             }
         }
 
