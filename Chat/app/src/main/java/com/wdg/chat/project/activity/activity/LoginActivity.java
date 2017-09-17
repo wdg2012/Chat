@@ -60,7 +60,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+//
         }
 
         @Override
