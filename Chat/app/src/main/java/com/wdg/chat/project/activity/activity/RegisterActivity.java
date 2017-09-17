@@ -101,7 +101,10 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         //验证码页面返回
         else if(requestCode == START_VERCODE){
             if(resultCode == RESULT_OK){
-                startActivity(new Intent(this, MainActivity.class));
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("photo", photoPath)
+                        .putExtra("phone", etPhoneNumber.getText().toString());
+                startActivity(intent);
                 finish();
             }
         }

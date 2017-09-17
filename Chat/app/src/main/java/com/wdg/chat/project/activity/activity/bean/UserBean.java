@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by HuangBin on 2017/9/16.
  */
-public class LoginBean {
+public class UserBean {
 
 
     /**

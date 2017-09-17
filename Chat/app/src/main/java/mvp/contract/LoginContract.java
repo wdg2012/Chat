@@ -1,7 +1,6 @@
 package mvp.contract;
 
-import com.wdg.chat.project.activity.activity.bean.LoginBean;
-import com.wdg.chat.project.activity.activity.bean.RegisterBean;
+import com.wdg.chat.project.activity.activity.bean.UserBean;
 
 import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
 
@@ -13,11 +12,11 @@ public interface LoginContract {
 
     interface Model extends BaseContract.Model{
         void login(String phone, String password,
-                   BaseHttpRequestCallback<LoginBean> callback);
+                   BaseHttpRequestCallback<UserBean> callback);
     }
 
     interface View extends BaseContract.View{
-        void loginResp(LoginBean loginBean);
+        void loginResp(UserBean userBean);
     }
 
     interface Presenter extends BaseContract.Presenter{

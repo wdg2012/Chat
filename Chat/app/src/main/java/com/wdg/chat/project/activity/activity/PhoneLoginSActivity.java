@@ -9,7 +9,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.wdg.chat.project.R;
-import com.wdg.chat.project.activity.activity.bean.LoginBean;
+import com.wdg.chat.project.activity.activity.bean.UserBean;
+import com.wdg.chat.project.activity.activity.util.SharedPrfUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,12 +62,14 @@ public class PhoneLoginSActivity extends BaseActivity implements LoginContract.V
     }
 
     @Override
-    public void loginResp(LoginBean loginBean) {
-        if("101".equals(loginBean.getCode())){
+    public void loginResp(UserBean userBean) {
+        if("101".equals(userBean.getCode())){
+            //保存用户信息
+            SharedPrfUtil.getInstance().setUserBean(userBean);
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }else{
-            Toast.makeText(this, loginBean.getError(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, userBean.getError(), Toast.LENGTH_SHORT).show();
         }
     }
 

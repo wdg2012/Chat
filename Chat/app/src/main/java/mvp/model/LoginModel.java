@@ -1,6 +1,6 @@
 package mvp.model;
 
-import com.wdg.chat.project.activity.activity.bean.LoginBean;
+import com.wdg.chat.project.activity.activity.bean.UserBean;
 
 import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
 import cn.finalteam.okhttpfinal.HttpRequest;
@@ -22,7 +22,7 @@ public class LoginModel implements LoginContract.Model {
      */
     @Override
     public void login(String phone, String password,
-                      BaseHttpRequestCallback<LoginBean> callback) {
+                      BaseHttpRequestCallback<UserBean> callback) {
         //创建参数
         RequestParams params = new RequestParams();
         params.addFormDataPart("phone", phone);

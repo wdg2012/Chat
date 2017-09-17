@@ -1,6 +1,6 @@
 package mvp.presenter;
 
-import com.wdg.chat.project.activity.activity.bean.LoginBean;
+import com.wdg.chat.project.activity.activity.bean.UserBean;
 
 import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
 import mvp.contract.LoginContract;
@@ -26,14 +26,14 @@ public class LoginPresenter implements LoginContract.Presenter {
             mLoginView.showDialog();
         }
         mLoginModel.login(phone, password,
-                new BaseHttpRequestCallback<LoginBean>(){
+                new BaseHttpRequestCallback<UserBean>(){
 
             @Override
-            protected void onSuccess(LoginBean loginBean) {
-                super.onSuccess(loginBean);
+            protected void onSuccess(UserBean userBean) {
+                super.onSuccess(userBean);
                 if(mLoginView != null){
                     mLoginView.dismissDialog();
-                    mLoginView.loginResp(loginBean);
+                    mLoginView.loginResp(userBean);
                 }
             }
 
