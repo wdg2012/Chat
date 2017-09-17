@@ -23,6 +23,7 @@ import com.wdg.chat.project.R;
 import com.wdg.chat.project.activity.activity.app.MyApp;
 import com.wdg.chat.project.activity.activity.bean.UserBean;
 import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
+import com.wdg.chat.project.activity.activity.util.SMEventHandler;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,6 +32,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 import mvp.contract.RegisterContract;
 import mvp.presenter.RegisterPresenter;
 
@@ -62,20 +65,51 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     Button btnRegister;
 
     private String photoPath;
-    private RegisterPresenter mPresenter;
+    //private RegisterPresenter mPresenter;
+
+    private EventHandler eventHandler = new SMEventHandler() {
+
+        public void ui_onAfterEvent(int event, int result, Object data) {
+            if (data instanceof Throwable) {
+                Throwable throwable = (Throwable)data;
+                String msg = throwable.getMessage();
+                Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
+                //Log.d("VerCode", msg);
+            } else {
+                //获取验证码
+                if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+                    //Toast.makeText(RegisterActivity.this, "收到验证码!", Toast.LENGTH_SHORT).show();
+                    //Log.d("VerCode", "收到验证码!");
+                    SMSSDK.unregisterEventHandler(eventHandler);
+                    Intent intent = new Intent(RegisterActivity.this, VerCodeActivity.class);
+                    //保存参数
+                    intent.putExtra("phone", etPhoneNumber.getText().toString())
+                            .putExtra("password", etPassword.getText().toString())
+                            .putExtra("country", etCountry.getText().toString())
+                            .putExtra("headPhoto", photoPath)
+                            .putExtra("user_nick", etNickName.getText().toString());
+                    //启动验证码页面
+                    startActivityForResult(intent, START_VERCODE);
+                }
+            }
+        }
+
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-        mPresenter = new RegisterPresenter(this);
+        //mPresenter = new RegisterPresenter(this);
         //设置图片为单选模式
         MyApp.getInstance().setSingleImagePicker();
+        SMSSDK.registerEventHandler(eventHandler);
     }
 
     @Override
     protected void onDestroy() {
+        SMSSDK.unregisterEventHandler(eventHandler);
         super.onDestroy();
     }
 
@@ -115,6 +149,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                 EventBus.getDefault().post(userBean);
                 finish();
             }
+            else if(resultCode == RESULT_CANCELED){
+                SMSSDK.registerEventHandler(eventHandler);
+            }
         }
     }
 
@@ -134,7 +171,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public void verCodeResp(VerCodeBean verCodeBean) {
-        if("101".equals(verCodeBean.getCode())){
+/*        if("101".equals(verCodeBean.getCode())){
             Log.d("VerCode", verCodeBean.getObj().getVer_code());
             Intent intent = new Intent(this, VerCodeActivity.class);
             //保存参数
@@ -147,7 +184,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
             startActivityForResult(intent, START_VERCODE);
         }else{
             Toast.makeText(this, verCodeBean.getError(), Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     /**
@@ -164,7 +201,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        mPresenter.obtainVerCode(etPhoneNumber.getText().toString());
+                        //mPresenter.obtainVerCode(etPhoneNumber.getText().toString());
+                        SMSSDK.getVerificationCode(etCountry.getText().toString(),
+                                                    etPhoneNumber.getText().toString());
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {

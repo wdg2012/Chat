@@ -17,12 +17,15 @@ import android.widget.Toast;
 import com.wdg.chat.project.R;
 import com.wdg.chat.project.activity.activity.bean.RegisterBean;
 import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
+import com.wdg.chat.project.activity.activity.util.SMEventHandler;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 import mvp.contract.RegisterContract;
 import mvp.contract.VerCodeContract;
 import mvp.presenter.RegisterPresenter;
@@ -50,7 +53,7 @@ public class VerCodeActivity extends BaseActivity
     Button btnRegister;
 
     private VerCodePresenter mVerPresenter;
-    private RegisterPresenter mRegPresenter;
+    //private RegisterPresenter mRegPresenter;
     private String phone, password, country, user_nick;
     private File photoFile;
 
@@ -94,11 +97,33 @@ public class VerCodeActivity extends BaseActivity
 
     };
 
+    private EventHandler eventHandler = new SMEventHandler() {
+
+        public void ui_onAfterEvent(int event, int result, Object data) {
+            if (data instanceof Throwable) {
+                Throwable throwable = (Throwable)data;
+                String msg = throwable.getMessage();
+                Toast.makeText(VerCodeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                //Log.d("VerCode", msg);
+            } else {
+                //获取验证码
+                if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+                    //Toast.makeText(RegisterActivity.this, "收到验证码!", Toast.LENGTH_SHORT).show();
+                    //Log.d("VerCode", "收到验证码!");
+                    countDownTimer.cancel();
+                    countDownTimer.start();
+                }
+            }
+        }
+
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vercode);
         ButterKnife.bind(this);
+        SMSSDK.registerEventHandler(eventHandler);
         Intent intent = getIntent();
         //获取数据
         phone = intent.getStringExtra("phone");
@@ -111,7 +136,7 @@ public class VerCodeActivity extends BaseActivity
         }
         initView();
         mVerPresenter = new VerCodePresenter(this);
-        mRegPresenter = new RegisterPresenter(this);
+        //mRegPresenter = new RegisterPresenter(this);
         countDownTimer.cancel();
         countDownTimer.start();
     }
@@ -127,6 +152,7 @@ public class VerCodeActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         countDownTimer.cancel();
+        SMSSDK.unregisterEventHandler(eventHandler);
         super.onDestroy();
     }
 
@@ -139,20 +165,21 @@ public class VerCodeActivity extends BaseActivity
                         etVerCode.getText().toString(), user_nick);
                 break;
             case R.id.tvVerCodeInfo:
-                mRegPresenter.obtainVerCode(phone);
+                //mRegPresenter.obtainVerCode(phone);
+                SMSSDK.getVerificationCode(country, phone);
                 break;
         }
     }
 
     @Override
     public void verCodeResp(VerCodeBean verCodeBean) {
-        if("101".equals(verCodeBean.getCode())){
+/*        if("101".equals(verCodeBean.getCode())){
             Log.d("VerCode", verCodeBean.getObj().getVer_code());
             countDownTimer.cancel();
             countDownTimer.start();
         }else{
             Toast.makeText(this, verCodeBean.getError(), Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     @Override

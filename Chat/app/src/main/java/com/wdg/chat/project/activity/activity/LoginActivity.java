@@ -81,25 +81,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     };
 
-    private EventHandler eventHandler = new SMEventHandler() {
-
-        public void ui_onAfterEvent(int event, int result, Object data) {
-            if (data instanceof Throwable) {
-                Throwable throwable = (Throwable)data;
-                String msg = throwable.getMessage();
-                Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
-                //Log.d("VerCode", msg);
-            } else {
-                //获取验证码
-                if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                    Toast.makeText(LoginActivity.this, "收到验证码!", Toast.LENGTH_SHORT).show();
-                    //Log.d("VerCode", "收到验证码!");
-                }
-            }
-        }
-
-    };
-
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,13 +90,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         updateView(null);
         initPopupWindow();
         mPresenter = new LoginPresenter(this);
-        SMSSDK.registerEventHandler(eventHandler);
         EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onDestroy() {
-        SMSSDK.unregisterEventHandler(eventHandler);
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
@@ -234,7 +213,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                     intent = new Intent(LoginActivity.this, PhoneLoginFActivity.class);
                     break;
                 case R.id.tvFindPwd:
-                    SMSSDK.getVerificationCode("86", "15705817983");
                     break;
                 case R.id.tvSeyCenter:
                     break;
