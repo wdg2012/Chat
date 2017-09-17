@@ -4,7 +4,6 @@
               android:background="#aa000000"
               android:id="@+id/pop_root"
               android:layout_height="match_parent"
-
     android:orientation="vertical" >
     <View
         android:layout_width="0dp"

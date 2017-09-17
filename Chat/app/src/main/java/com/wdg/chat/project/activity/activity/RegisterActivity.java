@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -101,10 +102,11 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         //验证码页面返回
         else if(requestCode == START_VERCODE){
             if(resultCode == RESULT_OK){
-                Intent intent = new Intent(this, MainActivity.class);
+                LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyApp.getInstance());
+                Intent intent = new Intent(LoginActivity.UPDATE_ACTIVITY);
                 intent.putExtra("photo", photoPath)
                         .putExtra("phone", etPhoneNumber.getText().toString());
-                startActivity(intent);
+                broadcastManager.sendBroadcast(intent);
                 finish();
             }
         }
