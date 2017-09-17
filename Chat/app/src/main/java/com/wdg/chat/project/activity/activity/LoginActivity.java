@@ -40,8 +40,8 @@ import mvp.presenter.LoginPresenter;
  */
 public class LoginActivity extends BaseActivity implements LoginContract.View {
 
-    public static String UPDATE_ACTIVITY = "update_activity";
-    public static String FINISH_ACTIVITY = "finish_activity";
+    public static final String UPDATE_ACTIVITY = "update_activity";
+    public static final String FINISH_ACTIVITY = "finish_activity";
 
     @BindView(R.id.iv_more)
     ImageView mIvMore;
