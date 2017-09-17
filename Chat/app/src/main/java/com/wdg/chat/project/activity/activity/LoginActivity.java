@@ -1,8 +1,13 @@
 package com.wdg.chat.project.activity.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -19,6 +24,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.wdg.chat.project.R;
+import com.wdg.chat.project.activity.activity.app.MyApp;
 import com.wdg.chat.project.activity.activity.bean.UserBean;
 import com.wdg.chat.project.activity.activity.util.SharedPrfUtil;
 
@@ -33,6 +39,9 @@ import mvp.presenter.LoginPresenter;
  * 邮箱18149542718@163
  */
 public class LoginActivity extends BaseActivity implements LoginContract.View {
+
+    public static String UPDATE_ACTIVITY = "update_activity";
+    public static String FINISH_ACTIVITY = "finish_activity";
 
     @BindView(R.id.iv_more)
     ImageView mIvMore;
@@ -77,24 +86,45 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     };
 
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(UPDATE_ACTIVITY.equals(action)){
+                updateView(intent);
+            }
+            else if(FINISH_ACTIVITY.equals(action)){
+                finish();
+            }
+        }
+
+    };
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        btnLogin.addTextChangedListener(textWatcher);
-        initView();
+        etPassword.addTextChangedListener(textWatcher);
+        updateView(getIntent());
         initPopupWindow();
         mPresenter = new LoginPresenter(this);
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyApp.getInstance());
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(UPDATE_ACTIVITY);
+        filter.addAction(FINISH_ACTIVITY);
+        broadcastManager.registerReceiver(receiver, filter);
     }
 
     @Override
     protected void onDestroy() {
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyApp.getInstance());
+        broadcastManager.unregisterReceiver(receiver);
         super.onDestroy();
     }
 
-    private void initView(){
-        Intent intent = getIntent();
+    private void updateView(Intent intent){
         String photo = null;
         String phone = null;
         if(intent != null){
@@ -153,6 +183,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         popupWindow = new PopupWindow(content,
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
     }
 
     private class PopButtonClick implements View.OnClickListener {
@@ -175,7 +208,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             }
             if (intent != null) {
                 startActivity(intent);
-                finish();
             }
         }
 

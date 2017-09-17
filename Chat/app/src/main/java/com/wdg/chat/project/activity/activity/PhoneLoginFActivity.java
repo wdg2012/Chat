@@ -58,7 +58,7 @@ public class PhoneLoginFActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_login_f);
         ButterKnife.bind(this);
-        btnNext.addTextChangedListener(textWatcher);
+        etPhoneNumber.addTextChangedListener(textWatcher);
     }
 
     @Override

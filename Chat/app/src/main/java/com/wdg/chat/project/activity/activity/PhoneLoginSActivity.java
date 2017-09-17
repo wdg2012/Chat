@@ -3,12 +3,14 @@ package com.wdg.chat.project.activity.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.wdg.chat.project.R;
+import com.wdg.chat.project.activity.activity.app.MyApp;
 import com.wdg.chat.project.activity.activity.bean.UserBean;
 import com.wdg.chat.project.activity.activity.util.SharedPrfUtil;
 
@@ -64,6 +66,8 @@ public class PhoneLoginSActivity extends BaseActivity implements LoginContract.V
     @Override
     public void loginResp(UserBean userBean) {
         if("101".equals(userBean.getCode())){
+            LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyApp.getInstance());
+            broadcastManager.sendBroadcast(new Intent(LoginActivity.FINISH_ACTIVITY));
             //保存用户信息
             SharedPrfUtil.getInstance().setUserBean(userBean);
             startActivity(new Intent(this, MainActivity.class));
