@@ -48,11 +48,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     EditText etPassword;
     @BindView(R.id.btnLogin)
     Button btnLogin;
-/*    @BindView(R.id.rlt_voice_login)
-    RelativeLayout mRltVoiceLogin;
-    @BindView(R.id.tv_change_auth)
-    TextView mTvChangeAuth;*/
-
     private PopupWindow popupWindow;
     private LoginPresenter mPresenter;
 
@@ -60,7 +55,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
         }
 
         @Override
