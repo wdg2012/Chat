@@ -1,12 +1,13 @@
 package com.wdg.chat.project.activity.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.mob.MobSDK;
 import com.wdg.chat.project.R;
 import com.wdg.chat.project.activity.activity.bean.UserBean;
+import com.wdg.chat.project.activity.activity.util.SMEventHandler;
 import com.wdg.chat.project.activity.activity.util.SharedPrfUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +60,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
         }
 
         @Override
@@ -74,54 +80,81 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         }
 
     };
-    EventHandler eventHandler = new EventHandler() {
-        public void afterEvent(int event, int result, Object data) {
+
+    private EventHandler eventHandler = new SMEventHandler() {
+
+        public void ui_onAfterEvent(int event, int result, Object data) {
             if (data instanceof Throwable) {
                 Throwable throwable = (Throwable)data;
                 String msg = throwable.getMessage();
                 Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                //Log.d("VerCode", msg);
             } else {
+                //获取验证码
                 if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                    // 处理你自己的逻辑
+                    Toast.makeText(LoginActivity.this, "收到验证码!", Toast.LENGTH_SHORT).show();
+                    //Log.d("VerCode", "收到验证码!");
                 }
             }
         }
+
     };
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        btnLogin.addTextChangedListener(textWatcher);
-        initView();
+        etPassword.addTextChangedListener(textWatcher);
+        updateView(null);
         initPopupWindow();
         mPresenter = new LoginPresenter(this);
         SMSSDK.registerEventHandler(eventHandler);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         SMSSDK.unregisterEventHandler(eventHandler);
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
-    private void initView(){
-        Intent intent = getIntent();
+    public void updateView(UserBean userBean){
         String photo = null;
         String phone = null;
-        if(intent != null){
-            photo = intent.getStringExtra("photo");
-            phone = intent.getStringExtra("phone");
+
+        if(userBean == null) {
+            Intent intent = getIntent();
+            if (intent != null) {
+                photo = intent.getStringExtra("photo");
+                phone = intent.getStringExtra("phone");
+            }
+        }else{
+            photo = userBean.getObj().getHead_path();
+            phone = userBean.getObj().getUser_phone();
         }
-        if(!TextUtils.isEmpty(photo)){
+
+        if (!TextUtils.isEmpty(photo)) {
             Glide.with(this)
                     .load(photo)
                     .placeholder(R.drawable.head_photo)
                     .error(R.drawable.head_photo)
                     .into(mIvHeadImage);
         }
-        if(!TextUtils.isEmpty(phone)){
+        if (!TextUtils.isEmpty(phone)) {
             mTvAccount.setText(phone);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCallBackMessage(UserBean userBean){
+        if(userBean != null) {
+            if ("update".equals(userBean.getError())) {
+                updateView(userBean);
+            } else if ("finish".equals(userBean.getError())) {
+                finish();
+            }
         }
     }
 
@@ -129,6 +162,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_more:
+                popupBackgroundAlpha(0.3f);
                 popupWindow.showAtLocation(mIvMore, Gravity.BOTTOM, 0, 0);
                 break;
             case R.id.btnLogin:
@@ -161,43 +195,55 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         content.findViewById(R.id.tvFindPwd).setOnClickListener(buttonClick);
         content.findViewById(R.id.tvSeyCenter).setOnClickListener(buttonClick);
         content.findViewById(R.id.tvRegister).setOnClickListener(buttonClick);
-        content.findViewById(R.id.pop_root).setOnClickListener(buttonClick);
+
         popupWindow = new PopupWindow(content,
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setOutsideTouchable(true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+
+            @Override
+            public void onDismiss() {
+                popupBackgroundAlpha(1.0f);
+            }
+
+        });
+    }
+
+    private void popupBackgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        //透明度 0.0-1.0
+        lp.alpha = bgAlpha;
+        getWindow().setAttributes(lp);
     }
 
     private class PopButtonClick implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
-            popupWindow.dismiss();
+            if (popupWindow!=null && popupWindow.isShowing()){
+                popupWindow.dismiss();
+            }
             Intent intent = null;
             switch (view.getId()) {
                 case R.id.tvSwtAccount:
                     intent = new Intent(LoginActivity.this, PhoneLoginFActivity.class);
                     break;
                 case R.id.tvFindPwd:
-
-                    SMSSDK.getVerificationCode("86","15705817983");
+                    SMSSDK.getVerificationCode("86", "15705817983");
                     break;
                 case R.id.tvSeyCenter:
                     break;
                 case R.id.tvRegister:
                     intent = new Intent(LoginActivity.this, RegisterActivity.class);
                     break;
-                case R.id.pop_root:
-                    break;
             }
             if (intent != null) {
                 startActivity(intent);
-            }
-            if (popupWindow!=null && popupWindow.isShowing()){
-                popupWindow.dismiss();
             }
         }
 

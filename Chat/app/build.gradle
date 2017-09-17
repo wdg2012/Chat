@@ -21,13 +21,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
+
 repositories{
     flatDir{
         dirs 'libs' //就是你放aar的目录地址
     }
 }
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -51,4 +52,5 @@ dependencies {
     compile files('libs/MobCommons-2017.0607.1736.jar')
     compile name:'SMSSDK-3.0.0',ext:'aar'
     compile name:'SMSSDKGUI-3.0.0',ext:'aar'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }

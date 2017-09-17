@@ -21,7 +21,10 @@ import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.wdg.chat.project.R;
 import com.wdg.chat.project.activity.activity.app.MyApp;
+import com.wdg.chat.project.activity.activity.bean.UserBean;
 import com.wdg.chat.project.activity.activity.bean.VerCodeBean;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -102,11 +105,14 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         //验证码页面返回
         else if(requestCode == START_VERCODE){
             if(resultCode == RESULT_OK){
-//                LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyApp.getInstance());
-//                Intent intent = new Intent(LoginActivity.UPDATE_ACTIVITY);
-//                intent.putExtra("photo", photoPath)
-//                        .putExtra("phone", etPhoneNumber.getText().toString());
-//                broadcastManager.sendBroadcast(intent);
+                UserBean userBean = new UserBean();
+                userBean.setError("update");
+                UserBean.ObjBean objBean = new UserBean.ObjBean();
+                objBean.setHead_path(photoPath);
+                objBean.setUser_phone(etPhoneNumber.getText().toString());
+                userBean.setObj(objBean);
+                //发送消息
+                EventBus.getDefault().post(userBean);
                 finish();
             }
         }

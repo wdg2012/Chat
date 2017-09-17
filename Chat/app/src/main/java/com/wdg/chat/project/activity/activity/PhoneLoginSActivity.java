@@ -14,6 +14,8 @@ import com.wdg.chat.project.activity.activity.app.MyApp;
 import com.wdg.chat.project.activity.activity.bean.UserBean;
 import com.wdg.chat.project.activity.activity.util.SharedPrfUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -63,16 +65,16 @@ public class PhoneLoginSActivity extends BaseActivity implements LoginContract.V
         }
     }
 
-
-
     @Override
     public void loginResp(UserBean userBean) {
         if("101".equals(userBean.getCode())){
-//            LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyApp.getInstance());
-//            broadcastManager.sendBroadcast(new Intent(LoginActivity.FINISH_ACTIVITY));
-//            //保存用户信息
+            //保存用户信息
             SharedPrfUtil.getInstance().setUserBean(userBean);
             startActivity(new Intent(this, MainActivity.class));
+            userBean.setError("finish");
+            userBean.setObj(null);
+            //发送消息
+            EventBus.getDefault().post(userBean);
             finish();
         }else{
             Toast.makeText(this, userBean.getError(), Toast.LENGTH_SHORT).show();
