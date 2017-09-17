@@ -102,11 +102,11 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         //验证码页面返回
         else if(requestCode == START_VERCODE){
             if(resultCode == RESULT_OK){
-                LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyApp.getInstance());
-                Intent intent = new Intent(LoginActivity.UPDATE_ACTIVITY);
-                intent.putExtra("photo", photoPath)
-                        .putExtra("phone", etPhoneNumber.getText().toString());
-                broadcastManager.sendBroadcast(intent);
+//                LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyApp.getInstance());
+//                Intent intent = new Intent(LoginActivity.UPDATE_ACTIVITY);
+//                intent.putExtra("photo", photoPath)
+//                        .putExtra("phone", etPhoneNumber.getText().toString());
+//                broadcastManager.sendBroadcast(intent);
                 finish();
             }
         }

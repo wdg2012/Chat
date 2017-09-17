@@ -63,12 +63,14 @@ public class PhoneLoginSActivity extends BaseActivity implements LoginContract.V
         }
     }
 
+
+
     @Override
     public void loginResp(UserBean userBean) {
         if("101".equals(userBean.getCode())){
-            LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyApp.getInstance());
-            broadcastManager.sendBroadcast(new Intent(LoginActivity.FINISH_ACTIVITY));
-            //保存用户信息
+//            LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyApp.getInstance());
+//            broadcastManager.sendBroadcast(new Intent(LoginActivity.FINISH_ACTIVITY));
+//            //保存用户信息
             SharedPrfUtil.getInstance().setUserBean(userBean);
             startActivity(new Intent(this, MainActivity.class));
             finish();
