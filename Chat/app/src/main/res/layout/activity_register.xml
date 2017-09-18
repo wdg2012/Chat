@@ -3,11 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="20dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+  >
+    <include layout="@layout/tool_bar_register"
+             android:layout_height="50dp"
+             android:layout_width="match_parent"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_height="match_parent">
 
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -32,8 +39,9 @@
                     android:gravity="left|center_vertical"
                     android:layout_marginLeft="8dp"
                     android:text="昵称"
+                    android:textColor="#333333"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                   />
 
                 <EditText
                     android:id="@+id/etNickName"
@@ -42,6 +50,8 @@
                     android:layout_weight="3"
                     android:hint="列如:陈晨"
                     android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:textColorHint="#DDDDDD"
                     android:inputType="none"
                     android:background="@null"/>
 
@@ -58,7 +68,7 @@
             android:id="@+id/ivPhoto"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@color/voice_login"/>
+            android:src="@drawable/take_photo"/>
 
     </LinearLayout>
 
@@ -81,14 +91,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:gravity="left|center_vertical"
                     android:layout_marginLeft="8dp"
                     android:text="国家/地区"
+                    android:textColor="#333333"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    />
 
                 <EditText
                     android:id="@+id/etCountry"
@@ -137,8 +147,9 @@
                     android:gravity="left|center_vertical"
                     android:layout_marginLeft="8dp"
                     android:text="手机号"
+                    android:textColor="#333333"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    />
 
                 <EditText
                     android:id="@+id/etPhoneNumber"
@@ -147,6 +158,8 @@
                     android:layout_weight="3"
                     android:hint="请填写手机号"
                     android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:textColorHint="#DDDDDD"
                     android:inputType="phone"
                     android:background="@null"/>
 
@@ -186,16 +199,19 @@
                     android:gravity="left|center_vertical"
                     android:layout_marginLeft="8dp"
                     android:text="密码"
+                    android:textColor="#333333"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                   />
 
                 <EditText
                     android:id="@+id/etPassword"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:hint="请填写密码"
+                    android:hint="填写密码"
                     android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:textColorHint="#DDDDDD"
                     android:inputType="textPassword"
                     android:background="@null"/>
 
@@ -220,5 +236,5 @@
         android:textColor="@color/color_white"
         android:text="注册"
         android:background="@drawable/comm_btn_enable"/>
-
+    </LinearLayout>
 </LinearLayout>
