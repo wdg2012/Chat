@@ -1,14 +1,10 @@
 package com.wdg.chat.project.activity.activity.app;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.view.CropImageView;
-import com.mob.MobApplication;
 import com.mob.MobSDK;
-import com.tencent.bugly.Bugly;
-import com.tencent.bugly.crashreport.CrashReport;
 import com.wdg.chat.project.activity.activity.util.GlideImageLoader;
 
 import cn.finalteam.okhttpfinal.OkHttpFinal;
