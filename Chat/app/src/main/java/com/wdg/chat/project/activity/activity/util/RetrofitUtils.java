@@ -3,6 +3,7 @@ package com.wdg.chat.project.activity.activity.util;
 import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -16,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RetrofitUtils {
-    private static final String API_SERVER = "https://api.douban.com"; // 服务器的地址
+    private static final String API_SERVER = "http://47.93.21.48:8080/ssm_war/"; // 服务器的地址
     private  static Retrofit sRetrofit;
     private static OkHttpClient mOkHttpClient;
 
@@ -54,11 +55,14 @@ public class RetrofitUtils {
      * @return
      */
     private static OkHttpClient createOkHttp(){
+        ReentrantLock lock = new ReentrantLock();
+        lock.lock();
       OkHttpClient  OkHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
+        lock.unlock();
         return OkHttpClient;
     }
 }

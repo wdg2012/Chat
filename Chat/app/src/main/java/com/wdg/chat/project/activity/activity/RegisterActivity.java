@@ -74,12 +74,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                 Throwable throwable = (Throwable)data;
                 String msg = throwable.getMessage();
                 Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
-                //Log.d("VerCode", msg);
             } else {
                 //获取验证码
                 if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                    //Toast.makeText(RegisterActivity.this, "收到验证码!", Toast.LENGTH_SHORT).show();
-                    //Log.d("VerCode", "收到验证码!");
                     SMSSDK.unregisterEventHandler(eventHandler);
                     Intent intent = new Intent(RegisterActivity.this, VerCodeActivity.class);
                     //保存参数
@@ -171,20 +168,6 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public void verCodeResp(VerCodeBean verCodeBean) {
-/*        if("101".equals(verCodeBean.getCode())){
-            Log.d("VerCode", verCodeBean.getObj().getVer_code());
-            Intent intent = new Intent(this, VerCodeActivity.class);
-            //保存参数
-            intent.putExtra("phone", etPhoneNumber.getText().toString())
-                .putExtra("password", etPassword.getText().toString())
-                .putExtra("country", etCountry.getText().toString())
-                .putExtra("headPhoto", photoPath)
-                .putExtra("user_nick", etNickName.getText().toString());
-            //启动验证码页面
-            startActivityForResult(intent, START_VERCODE);
-        }else{
-            Toast.makeText(this, verCodeBean.getError(), Toast.LENGTH_SHORT).show();
-        }*/
     }
 
     /**
