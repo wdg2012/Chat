@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -93,6 +96,34 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     };
 
+    private TextWatcher textWatcher = new TextWatcher() {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (etNickName.getText().toString().length() > 0
+                    && etCountry.getText().toString().length() > 0
+                    && etPhoneNumber.getText().toString().length() > 0
+                    && etPassword.getText().toString().length() > 0) {
+                btnRegister.setEnabled(true);
+                btnRegister.setBackground(getResources().getDrawable(R.drawable.comm_btn_enable));
+            }else{
+                btnRegister.setEnabled(false);
+                btnRegister.setBackground(getResources().getDrawable(R.drawable.comm_btn_disenable));
+            }
+        }
+
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +133,10 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         //设置图片为单选模式
         MyApp.getInstance().setSingleImagePicker();
         SMSSDK.registerEventHandler(eventHandler);
+        etNickName.addTextChangedListener(textWatcher);
+        etCountry.addTextChangedListener(textWatcher);
+        etPhoneNumber.addTextChangedListener(textWatcher);
+        etPassword.addTextChangedListener(textWatcher);
     }
 
     @Override
@@ -152,7 +187,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         }
     }
 
-    @OnClick({R.id.ivPhoto, R.id.btnRegister})
+    @OnClick({R.id.ivPhoto, R.id.btnRegister, R.id.layout_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivPhoto:
@@ -162,6 +197,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                 if(validate()) {
                     showGetVerCodeDialog();
                 }
+                break;
+            case R.id.layout_back:
+                finish();
                 break;
         }
     }
