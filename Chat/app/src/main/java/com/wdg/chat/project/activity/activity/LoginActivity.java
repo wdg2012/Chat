@@ -37,7 +37,7 @@ import cn.smssdk.SMSSDK;
 import mvp.contract.LoginContract;
 import mvp.presenter.LoginPresenter;
 
-/**
+/**登录页面
  * Created by ${wdgan} on 2017/8/30 0030.
  * 邮箱18149542718@163
  */
