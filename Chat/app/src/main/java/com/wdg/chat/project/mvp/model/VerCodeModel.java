@@ -42,12 +42,12 @@ public class VerCodeModel implements VerCodeContract.Model {
                          String user_nick, NetSubscriber<RegisterBean> subscriber) {
         UserService userService = RetrofitUtils.createService(UserService.class);
         //创建参数
-        RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), headPhoto);
+        RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), headPhoto);
         RequestBody body = new MultipartBody.Builder()
                 .addFormDataPart("phone", phone)
                 .addFormDataPart("password", password)
                 .addFormDataPart("country", country)
-                .addFormDataPart("file", headPhoto.getName(), fileBody)
+                .addFormDataPart("headPhoto", headPhoto.getName(), fileBody)
                 .addFormDataPart("ver_code", ver_code)
                 .addFormDataPart("user_nick", user_nick)
                 .build();

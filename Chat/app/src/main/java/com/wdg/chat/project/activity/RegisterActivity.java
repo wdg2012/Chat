@@ -25,7 +25,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import com.wdg.chat.project.mvp.contract.RegisterContract;
 
@@ -167,6 +166,11 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     @Override
     public String getNickName() {
         return etNickName.getText().toString();
+    }
+
+    @Override
+    public String getPhotoPath() {
+        return photoPath;
     }
 
     @Override

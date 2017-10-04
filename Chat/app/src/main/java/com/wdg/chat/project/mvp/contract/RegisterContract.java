@@ -13,12 +13,13 @@ public interface RegisterContract {
     interface Model extends BaseContract.Model{
         void getVerCode(String country, String phone);
         boolean validate(Context context,
-                      String nickName, String phoneNumber, String password);
+                      String nickName, String photo, String phoneNumber, String password);
     }
 
     interface View extends BaseContract.View{
         void toVerCodeActivity();
         String getNickName();
+        String getPhotoPath();
         String getCountry();
         String getPhoneNumber();
         String getPassword();

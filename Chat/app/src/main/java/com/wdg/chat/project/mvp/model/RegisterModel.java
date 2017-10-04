@@ -22,12 +22,16 @@ public class RegisterModel implements RegisterContract.Model {
 
     @Override
     public boolean validate(Context context,
-                            String nickName, String phoneNumber, String password) {
+                            String nickName, String photo, String phoneNumber, String password) {
         boolean result = true;
         String error = "";
 
         if(TextUtils.isEmpty(nickName)){
             error = "昵称不能为空!";
+            result = false;
+        }
+        else if(TextUtils.isEmpty(photo)){
+            error = "头像不能为空!";
             result = false;
         }
         else if(TextUtils.isEmpty(phoneNumber)){

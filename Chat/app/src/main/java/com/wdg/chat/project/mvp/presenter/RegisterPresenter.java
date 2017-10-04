@@ -6,21 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
 import com.wdg.chat.project.MyApp;
-import com.wdg.chat.project.R;
 import com.wdg.chat.project.activity.RegisterActivity;
-import com.wdg.chat.project.bean.UserBean;
 import com.wdg.chat.project.mvp.contract.RegisterContract;
 import com.wdg.chat.project.mvp.model.RegisterModel;
 import com.wdg.chat.project.util.DialogUtil;
 import com.wdg.chat.project.util.SMEventHandler;
-
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.List;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -86,10 +78,12 @@ public class RegisterPresenter implements RegisterContract.Presenter {
     @Override
     public void showGetVerCodeDialog(Activity context) {
         String nickName = mRegisterView.getNickName();
+        String photoPath = mRegisterView.getPhotoPath();
         final String country = mRegisterView.getCountry();
         final String phoneNumber = mRegisterView.getPhoneNumber();
         String password = mRegisterView.getPassword();
-        if(mRegisterModel.validate(mContext, nickName, phoneNumber, password)) {
+        if(mRegisterModel.validate(mContext,
+                nickName, photoPath, phoneNumber, password)) {
             //创建对话框
             DialogUtil.builder(context, DialogUtil.TYPE_PROMPT)
                     .setTitle("确认手机号码")

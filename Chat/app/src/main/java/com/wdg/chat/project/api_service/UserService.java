@@ -24,7 +24,6 @@ public interface UserService {
      * @param body 请求体
      * @return
      */
-    @Multipart
     @POST("user/register")
     Observable<RegisterBean> register(@Body RequestBody body);
     /**

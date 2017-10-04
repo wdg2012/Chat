@@ -19,10 +19,12 @@ public class PopupWindowUtil {
     }
 
     public static void popupBackgroundAlpha(Window window, float bgAlpha) {
-        WindowManager.LayoutParams lp = window.getAttributes();
-        //透明度 0.0-1.0
-        lp.alpha = bgAlpha;
-        window.setAttributes(lp);
+        if(window != null) {
+            WindowManager.LayoutParams lp = window.getAttributes();
+            //透明度 0.0-1.0
+            lp.alpha = bgAlpha;
+            window.setAttributes(lp);
+        }
     }
 
     public static class Creator

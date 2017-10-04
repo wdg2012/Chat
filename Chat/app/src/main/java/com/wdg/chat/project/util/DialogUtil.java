@@ -140,7 +140,6 @@ public class DialogUtil {
                                         OnClickListenerAdapter listenerAdapter){
             mBtnInfo1 = okBtn;
             mBtnInfo2 = cancelBtn;
-            if(listenerAdapter != null){ listenerAdapter.type = TYPE_PROMPT; }
             mClickListener = listenerAdapter;
             return this;
         }
@@ -189,7 +188,6 @@ public class DialogUtil {
         public ChoiceBuilder setItems(String[] items,
                                       OnClickListenerAdapter listenerAdapter){
             mChoiceItems = items;
-            if(listenerAdapter != null){ listenerAdapter.type = TYPE_CHOICE; }
             mClickListener = listenerAdapter;
             return this;
         }
@@ -200,23 +198,20 @@ public class DialogUtil {
             implements DialogInterface.OnClickListener,
             DialogInterface.OnMultiChoiceClickListener {
 
-        private Class<? extends Builder> type;
-
         @Override
         public void onClick(DialogInterface dialog, int which) {
             dialog.dismiss();
-            if(TYPE_PROMPT == type){
+            if(which >= 0){
+                onSingleChoiceClick(dialog, which);
+            }else{
                 switch (which){
-                    case 0:
+                    case -1:
                         onOkClick(dialog);
                         break;
-                    case 2:
+                    case -2:
                         onCancelClick(dialog);
                         break;
                 }
-            }
-            else if(TYPE_CHOICE == type){
-                onSingleChoiceClick(dialog, which);
             }
         }
 
