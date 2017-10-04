@@ -1,13 +1,19 @@
 package com.wdg.chat.project.mvp.model;
 
+import com.wdg.chat.project.api_service.UserService;
 import com.wdg.chat.project.bean.RegisterBean;
 
 import java.io.File;
-
-import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
-import cn.finalteam.okhttpfinal.HttpRequest;
-import cn.finalteam.okhttpfinal.RequestParams;
 import com.wdg.chat.project.mvp.contract.VerCodeContract;
+import com.wdg.chat.project.util.NetSubscriber;
+import com.wdg.chat.project.util.RetrofitUtils;
+
+import cn.smssdk.SMSSDK;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -25,7 +31,7 @@ public class VerCodeModel implements VerCodeContract.Model {
      * @param headPhoto
      * @param ver_code
      * @param user_nick
-     * @param callback
+     * @param subscriber
      */
     @Override
     public void register(String phone,
@@ -33,17 +39,28 @@ public class VerCodeModel implements VerCodeContract.Model {
                          String country,
                          File headPhoto,
                          String ver_code,
-                         String user_nick, BaseHttpRequestCallback<RegisterBean> callback) {
+                         String user_nick, NetSubscriber<RegisterBean> subscriber) {
+        UserService userService = RetrofitUtils.createService(UserService.class);
         //创建参数
-        RequestParams params = new RequestParams();
-        params.addFormDataPart("phone", phone);
-        params.addFormDataPart("password", password);
-        params.addFormDataPart("country", country);
-        params.addFormDataPart("headPhoto", headPhoto);
-        params.addFormDataPart("ver_code", ver_code);
-        params.addFormDataPart("user_nick", user_nick);
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), headPhoto);
+        RequestBody body = new MultipartBody.Builder()
+                .addFormDataPart("phone", phone)
+                .addFormDataPart("password", password)
+                .addFormDataPart("country", country)
+                .addFormDataPart("file", headPhoto.getName(), fileBody)
+                .addFormDataPart("ver_code", ver_code)
+                .addFormDataPart("user_nick", user_nick)
+                .build();
         //发送请求
-        HttpRequest.post("http://47.93.21.48:8080/ssm_war/user/register", params, callback);
+        userService.register(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    @Override
+    public void getVerCode(String country, String phone) {
+        SMSSDK.getVerificationCode(country, phone);
     }
 
 }

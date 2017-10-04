@@ -28,37 +28,12 @@ public class PhoneLoginFActivity extends BaseActivity {
     @BindView(R.id.btnNext)
     Button btnNext;
 
-    private TextWatcher textWatcher = new TextWatcher() {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if(s.length() > 0){
-                btnNext.setEnabled(true);
-                btnNext.setBackground(getResources().getDrawable(R.drawable.comm_btn_enable));
-            }else{
-                btnNext.setEnabled(false);
-                btnNext.setBackground(getResources().getDrawable(R.drawable.comm_btn_disenable));
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-
-    };
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_login_f);
         ButterKnife.bind(this);
-        etPhoneNumber.addTextChangedListener(textWatcher);
+        etPhoneNumber.addTextChangedListener(this);
     }
 
     @Override
@@ -79,4 +54,16 @@ public class PhoneLoginFActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if(s.length() > 0){
+            btnNext.setEnabled(true);
+            btnNext.setBackground(getResources().getDrawable(R.drawable.comm_btn_enable));
+        }else{
+            btnNext.setEnabled(false);
+            btnNext.setBackground(getResources().getDrawable(R.drawable.comm_btn_disenable));
+        }
+    }
+
 }

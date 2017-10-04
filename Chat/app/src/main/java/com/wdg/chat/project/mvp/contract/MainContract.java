@@ -5,6 +5,7 @@ package com.wdg.chat.project.mvp.contract;
  * 邮箱18149542718@163
  */
 public interface MainContract {
+
     interface Model {
     }
 
@@ -13,4 +14,5 @@ public interface MainContract {
 
     interface Presenter {
     }
+
 }

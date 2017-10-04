@@ -1,11 +1,13 @@
 package com.wdg.chat.project.mvp.model;
 
+import com.wdg.chat.project.api_service.UserService;
 import com.wdg.chat.project.bean.UserBean;
-
-import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
-import cn.finalteam.okhttpfinal.HttpRequest;
-import cn.finalteam.okhttpfinal.RequestParams;
 import com.wdg.chat.project.mvp.contract.LoginContract;
+import com.wdg.chat.project.util.NetSubscriber;
+import com.wdg.chat.project.util.RetrofitUtils;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -18,17 +20,17 @@ public class LoginModel implements LoginContract.Model {
      * 登录
      * @param phone
      * @param password
-     * @param callback
+     * @param subscriber
      */
     @Override
     public void login(String phone, String password,
-                      BaseHttpRequestCallback<UserBean> callback) {
-        //创建参数
-        RequestParams params = new RequestParams();
-        params.addFormDataPart("phone", phone);
-        params.addFormDataPart("password", password);
+                      NetSubscriber<UserBean> subscriber) {
+        UserService userService = RetrofitUtils.createService(UserService.class);
         //发送请求
-        HttpRequest.post("http://47.93.21.48:8080/ssm_war/user/login", params, callback);
+        userService.login(phone, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
     }
 
 }

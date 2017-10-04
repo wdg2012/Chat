@@ -15,7 +15,7 @@ public interface BaseContract {
     }
 
     interface Presenter {
-
+        void checkViewNull();
     }
 
 }

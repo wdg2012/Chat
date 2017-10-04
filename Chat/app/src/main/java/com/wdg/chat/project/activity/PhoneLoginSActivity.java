@@ -64,19 +64,15 @@ public class PhoneLoginSActivity extends BaseActivity implements LoginContract.V
     }
 
     @Override
-    public void loginResp(UserBean userBean) {
-        if("101".equals(userBean.getCode())){
-            //保存用户信息
-            SharedPrfUtil.getInstance().setUserBean(userBean);
-            startActivity(new Intent(this, MainActivity.class));
-            userBean.setError("finish");
-            userBean.setObj(null);
-            //发送消息
-            EventBus.getDefault().post(userBean);
-            finish();
-        }else{
-            Toast.makeText(this, userBean.getError(), Toast.LENGTH_SHORT).show();
-        }
+    public void toMainActivity(UserBean userBean) {
+        //保存用户信息
+        SharedPrfUtil.getInstance().setUserBean(userBean);
+        startActivity(new Intent(this, MainActivity.class));
+        userBean.setError("finish");
+        userBean.setObj(null);
+        //发送消息
+        EventBus.getDefault().post(userBean);
+        finish();
     }
 
 }

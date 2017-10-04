@@ -1,8 +1,7 @@
 package com.wdg.chat.project.mvp.contract;
 
 import com.wdg.chat.project.bean.UserBean;
-
-import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
+import com.wdg.chat.project.util.NetSubscriber;
 
 /**
  * Created by ${wdgan} on 2017/8/30 0030.
@@ -12,11 +11,11 @@ public interface LoginContract {
 
     interface Model extends BaseContract.Model{
         void login(String phone, String password,
-                   BaseHttpRequestCallback<UserBean> callback);
+                   NetSubscriber<UserBean> subscriber);
     }
 
     interface View extends BaseContract.View{
-        void loginResp(UserBean userBean);
+        void toMainActivity(UserBean userBean);
     }
 
     interface Presenter extends BaseContract.Presenter{

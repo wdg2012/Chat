@@ -1,10 +1,10 @@
 package com.wdg.chat.project.mvp.contract;
 
 import com.wdg.chat.project.bean.RegisterBean;
+import com.wdg.chat.project.util.NetSubscriber;
 
 import java.io.File;
 
-import cn.finalteam.okhttpfinal.BaseHttpRequestCallback;
 
 /**
  * Created by HuangBin on 2017/9/15.
@@ -17,11 +17,14 @@ public interface VerCodeContract {
                       String country,
                       File headPhoto,
                       String ver_code,
-                      String user_nick, BaseHttpRequestCallback<RegisterBean> callback);
+                      String user_nick, NetSubscriber<RegisterBean> subscriber);
+        void getVerCode(String country, String phone);
     }
 
     interface View extends BaseContract.View{
-        void registerResp(RegisterBean registerBean);
+        void setActivityResult(int resultCode);
+        void onTickTime(long secTime);
+        void onFinishTime();
     }
 
     interface Presenter extends BaseContract.Presenter{
@@ -30,6 +33,9 @@ public interface VerCodeContract {
                       String country,
                       File headPhoto,
                       String ver_code, String user_nick);
+        void getVerCode(String country, String phone);
+        void startTimer();
+        void cancelTimer();
     }
 
 }

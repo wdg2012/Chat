@@ -7,8 +7,6 @@ import com.lzy.imagepicker.view.CropImageView;
 import com.mob.MobSDK;
 import com.wdg.chat.project.util.GlideImageLoader;
 
-import cn.finalteam.okhttpfinal.OkHttpFinal;
-import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
 
 /**
  * Created by ${吴登赶} on 2017/8/27.
@@ -27,9 +25,9 @@ public class MyApp extends Application {
 
         mInstance = this;
 
-//        Bugly.init(getApplicationContext(), "88380eb943", false);
-        OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
-        OkHttpFinal.getInstance().init(builder.build());
+        //Bugly.init(getApplicationContext(), "88380eb943", false);
+        //OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
+        //OkHttpFinal.getInstance().init(builder.build());
 
         //初始化 图片选择器
         ImagePicker imagePicker = ImagePicker.getInstance();

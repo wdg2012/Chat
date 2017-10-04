@@ -13,25 +13,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by ${wdgan} on 2017/9/16 0016.
  * 邮箱18149542718@163
- *
  */
-
 public class RetrofitUtils {
     private static final String API_SERVER = "http://47.93.21.48:8080/ssm_war/"; // 服务器的地址
-    private  static Retrofit sRetrofit;
+    private static Retrofit sRetrofit;
     private static OkHttpClient mOkHttpClient;
 
     /**
      * 获取 Retrofit 客户端
      * @return
      */
-    private static Retrofit getRetrofit(){
-        if (sRetrofit ==null) {
+    private static Retrofit getRetrofit() {
+        if (sRetrofit == null) {
             if (null == mOkHttpClient) {
-                mOkHttpClient =  createOkHttp();
+                mOkHttpClient = createOkHttp();
             }
             sRetrofit = new Retrofit.Builder()
-                    .baseUrl(API_SERVER).addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .baseUrl(API_SERVER)
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
                     .client(mOkHttpClient)
                     .build();
@@ -45,7 +44,7 @@ public class RetrofitUtils {
      * @param <T>
      * @return
      */
-    public  static <T> T  createService(Class<T>  sClass){
+    public static <T> T createService(Class<T> sClass) {
         Retrofit retrofit = getRetrofit();
         return retrofit.create(sClass);
     }
@@ -54,10 +53,10 @@ public class RetrofitUtils {
      * 创建okHttp 客户端
      * @return
      */
-    private static OkHttpClient createOkHttp(){
+    private static OkHttpClient createOkHttp() {
         ReentrantLock lock = new ReentrantLock();
         lock.lock();
-      OkHttpClient  OkHttpClient = new OkHttpClient.Builder()
+        OkHttpClient OkHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
